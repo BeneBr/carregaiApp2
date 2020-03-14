@@ -40,6 +40,7 @@ class _LoginState extends State<Login> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
+                  Container(margin: EdgeInsets.only(bottom: 50), child: Text("CarregAI", style: TextStyle(fontSize: 40),)),
                   cpfCnpj("CPF ou CNPJ"),
                   Divider(),
                   password("SENHA"),
@@ -62,7 +63,7 @@ class _LoginState extends State<Login> {
   Widget cpfCnpj(String label){
     return (
       TextFormField(
-        style: TextStyle(fontSize: 20),
+        style: TextStyle(fontSize: 18),
         keyboardType: TextInputType.number,
         controller: _cpfCnpjController,
         onChanged: (value){
@@ -80,7 +81,7 @@ class _LoginState extends State<Login> {
         },
         decoration: InputDecoration(
           labelText: label,
-          labelStyle: TextStyle(fontSize: 25),
+          labelStyle: TextStyle(fontSize: 18),
           prefixIcon: Icon(Icons.person),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
@@ -94,13 +95,13 @@ class _LoginState extends State<Login> {
     return (
         TextFormField(
           maxLength: 8,
-          style: TextStyle(fontSize: 20),
+          style: TextStyle(fontSize: 18),
           keyboardType: TextInputType.text,
           obscureText: exibirSenha,
           controller: _senhaController,
           decoration: InputDecoration(
               labelText: label,
-              labelStyle: TextStyle(fontSize: 25),
+              labelStyle: TextStyle(fontSize: 18),
               prefixIcon: Icon(Icons.lock),
               suffixIcon: IconButton(
                 icon: exibirSenha == true ? Icon(Icons.visibility_off) : Icon(Icons.visibility) ,
@@ -140,7 +141,7 @@ class _LoginState extends State<Login> {
           width: double.infinity,
           child: FlatButton(
             splashColor: Theme.of(context).primaryColorLight,
-            child: Text(label, style: TextStyle(fontSize: 20, color: Colors.white),),
+            child: Text(label, style: TextStyle(fontSize: 18, color: Colors.white),),
             onPressed: ()=>null,
           ),
         )
@@ -151,7 +152,7 @@ class _LoginState extends State<Login> {
     return (
       Container(
         child: FlatButton(
-          child: Text(label, style: TextStyle(fontSize: 20),),
+          child: Text(label, style: TextStyle(fontSize: 18),),
           onPressed: ()=>null,
         ),
       )

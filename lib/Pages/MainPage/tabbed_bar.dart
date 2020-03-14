@@ -12,6 +12,7 @@ class TabbedBar extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           bottom: TabBar(
+            labelStyle: TextStyle(fontSize: 18),
             indicatorColor: Theme.of(context).primaryColor,
             tabs: <Widget>[
               Tab(text: "ENTRAR", icon: Icon(Icons.person),),

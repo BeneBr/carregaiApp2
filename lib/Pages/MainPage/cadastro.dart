@@ -53,7 +53,7 @@ class _CadastroState extends State<Cadastro> {
   Widget cpfCnpj(String label){
     return (
         TextFormField(
-          style: TextStyle(fontSize: 20),
+          style: TextStyle(fontSize: 18),
           keyboardType: TextInputType.number,
           controller: _cpfCnpjController,
           onChanged: (value){
@@ -71,7 +71,7 @@ class _CadastroState extends State<Cadastro> {
           },
           decoration: InputDecoration(
               labelText: label,
-              labelStyle: TextStyle(fontSize: 25),
+              labelStyle: TextStyle(fontSize: 18),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
               )
@@ -84,12 +84,12 @@ class _CadastroState extends State<Cadastro> {
     return (
       TextFormField(
         controller: controller,
-        style: TextStyle(fontSize: 20),
+        style: TextStyle(fontSize: 18),
         obscureText: obscure,
         keyboardType: type,
         decoration: InputDecoration(
             labelText: label,
-            labelStyle: TextStyle(fontSize: 25),
+            labelStyle: TextStyle(fontSize: 18),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
             )
@@ -102,13 +102,13 @@ class _CadastroState extends State<Cadastro> {
     return (
         TextFormField(
           maxLength: 8,
-          style: TextStyle(fontSize: 20),
+          style: TextStyle(fontSize: 18),
           keyboardType: TextInputType.text,
           obscureText: exibirSenha,
           controller: _senhaController,
           decoration: InputDecoration(
             labelText: label,
-            labelStyle: TextStyle(fontSize: 25),
+            labelStyle: TextStyle(fontSize: 18),
             prefixIcon: Icon(Icons.lock),
             suffixIcon: IconButton(
               icon: exibirSenha == true ? Icon(Icons.visibility_off) : Icon(Icons.visibility) ,
@@ -140,7 +140,7 @@ class _CadastroState extends State<Cadastro> {
           width: double.infinity,
           child: FlatButton(
             splashColor: Theme.of(context).primaryColorLight,
-            child: Text(label, style: TextStyle(fontSize: 20, color: Colors.white),),
+            child: Text(label, style: TextStyle(fontSize: 18, color: Colors.white),),
             onPressed: ()=>null,
           ),
         )
