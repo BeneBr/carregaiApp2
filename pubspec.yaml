@@ -26,6 +26,8 @@ dependencies:
   scoped_model: ^1.0.1
   cpf_cnpj_validator: ^1.0.5
   flutter_masked_text: ^0.8.0
+  email_validator: ^1.0.4
+  connectivity: ^0.4.8+2
 
 
 dev_dependencies:

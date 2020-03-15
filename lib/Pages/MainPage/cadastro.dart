@@ -1,3 +1,6 @@
+import 'package:cpf_cnpj_validator/cnpj_validator.dart';
+import 'package:cpf_cnpj_validator/cpf_validator.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 
@@ -18,11 +21,22 @@ class _CadastroState extends State<Cadastro> {
 
   TextEditingController _nomeController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
-  final _telefoneController = MaskedTextController(mask: "(00)00000-0000");
-
-
+  final _telefoneController = MaskedTextController(mask: "(00) 00000-0000");
 
   GlobalKey<FormState> _form = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    _cpfCnpjController.dispose();
+    _cnpjController.dispose();
+    _senhaController.dispose();
+    _cpfCnpjController.dispose();
+    _nomeController.dispose();
+    _emailController.dispose();
+    _telefoneController.dispose();
+    print("OI");
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,13 +47,15 @@ class _CadastroState extends State<Cadastro> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-          campos("Nome ou Razao Social", _nomeController, TextInputType.text, false),
+          Text("INFORME SEUS DADOS", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
+          Divider(),
+          campos("Nome ou Razao Social", _nomeController, TextInputType.text, false, nomeValidator),
           Divider(),
           cpfCnpj("CPF OU CNPJ"),
           Divider(),
-          campos("Telefone", _telefoneController, TextInputType.number, false),
+          campos("Telefone", _telefoneController, TextInputType.number, false, telefoneValidator),
           Divider(),
-          campos("Email",_emailController,TextInputType.emailAddress, false),
+          campos("Email",_emailController,TextInputType.emailAddress, false, emailValidator),
           Divider(),
           password("Senha"),
           Divider(),
@@ -69,6 +85,22 @@ class _CadastroState extends State<Cadastro> {
               });
             }
           },
+          validator: (value){
+            if(value.length > 14){
+              if(CNPJValidator.isValid(value)){
+                return null;
+              }else{
+                return "CNPJ INVALIDO";
+              }
+            }else{
+              if(CPFValidator.isValid(value)){
+                return null;
+              }else{
+                return "CPF INVALIDO";
+              }
+            }
+
+          },
           decoration: InputDecoration(
               labelText: label,
               labelStyle: TextStyle(fontSize: 18),
@@ -80,13 +112,14 @@ class _CadastroState extends State<Cadastro> {
     );
   }
 
-  Widget campos(String label, TextEditingController controller, TextInputType type, bool obscure){
+  Widget campos(String label, TextEditingController controller, TextInputType type, bool obscure, Function validator){
     return (
       TextFormField(
         controller: controller,
         style: TextStyle(fontSize: 18),
         obscureText: obscure,
         keyboardType: type,
+        validator: validator,
         decoration: InputDecoration(
             labelText: label,
             labelStyle: TextStyle(fontSize: 18),
@@ -101,6 +134,13 @@ class _CadastroState extends State<Cadastro> {
   Widget password(String label){
     return (
         TextFormField(
+          validator: (value){
+            if(value.length != 8){
+              return "Senha precisa de 8 caracteres";
+            }{
+              return null;
+            }
+          },
           maxLength: 8,
           style: TextStyle(fontSize: 18),
           keyboardType: TextInputType.text,
@@ -109,7 +149,6 @@ class _CadastroState extends State<Cadastro> {
           decoration: InputDecoration(
             labelText: label,
             labelStyle: TextStyle(fontSize: 18),
-            prefixIcon: Icon(Icons.lock),
             suffixIcon: IconButton(
               icon: exibirSenha == true ? Icon(Icons.visibility_off) : Icon(Icons.visibility) ,
               onPressed: (){
@@ -135,15 +174,43 @@ class _CadastroState extends State<Cadastro> {
   Widget cadastrar(String label){
     return (
         Container(
-          color: Theme.of(context).primaryColorDark,
+          color: Theme.of(context).primaryColor,
           height: 40,
           width: double.infinity,
           child: FlatButton(
             splashColor: Theme.of(context).primaryColorLight,
             child: Text(label, style: TextStyle(fontSize: 18, color: Colors.white),),
-            onPressed: ()=>null,
+            onPressed: (){
+              if(_form.currentState.validate()){
+                print("Oi");
+              }
+            },
           ),
         )
     );
+  }
+
+  String nomeValidator(String name){
+    if(name.isEmpty || name.length < 7 || name.split(" ").length < 2){
+      return "Nome Invalido";
+    }else{
+      return null;
+    }
+  }
+
+  String emailValidator(String email){
+    if(EmailValidator.validate(email)){
+      return null;
+    }else{
+      return "EMAIL INVALIDO";
+    }
+  }
+
+  String telefoneValidator(String telefone){
+    if(telefone.length < 15){
+      return "Telefone Invalido";
+    }else{
+      return null;
+    }
   }
 }

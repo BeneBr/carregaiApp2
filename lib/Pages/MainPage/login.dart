@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:cpf_cnpj_validator/cpf_validator.dart';
 import 'package:cpf_cnpj_validator/cnpj_validator.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
+import 'package:connectivity/connectivity.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -10,6 +13,7 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
 
+
   bool exibirSenha = true;
   String dica = "Visualizar";
 
@@ -17,16 +21,16 @@ class _LoginState extends State<Login> {
   TextEditingController _cnpjController = MaskedTextController(mask: "00.000.000/0000-00");
   TextEditingController _senhaController = TextEditingController();
   GlobalKey<FormState> _form = GlobalKey<FormState>();
-
   TextEditingController _cpfCnpjController;
+  final _conexaoStream = StreamController<ConnectivityResult>();
 
 
   @override
   void dispose() {
+    super.dispose();
     _cpfController.dispose();
     _cnpjController.dispose();
     _senhaController.dispose();
-    super.dispose();
   }
 
   @override
@@ -40,7 +44,7 @@ class _LoginState extends State<Login> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Container(margin: EdgeInsets.only(bottom: 50), child: Text("CarregAI", style: TextStyle(fontSize: 40),)),
+                  Container(margin: EdgeInsets.only(bottom: 50), child: Text("ENTRAR", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),)),
                   cpfCnpj("CPF ou CNPJ"),
                   Divider(),
                   password("SENHA"),
@@ -66,6 +70,22 @@ class _LoginState extends State<Login> {
         style: TextStyle(fontSize: 18),
         keyboardType: TextInputType.number,
         controller: _cpfCnpjController,
+        validator: (value){
+          if(value.length > 14){
+            if(CNPJValidator.isValid(value)){
+              return null;
+            }else{
+              return "CNPJ INVALIDO";
+            }
+          }else{
+            if(CPFValidator.isValid(value)){
+              return null;
+            }else{
+              return "CPF INVALIDO";
+            }
+          }
+
+        },
         onChanged: (value){
           if(value.length > 14){
             setState(() {
@@ -99,6 +119,13 @@ class _LoginState extends State<Login> {
           keyboardType: TextInputType.text,
           obscureText: exibirSenha,
           controller: _senhaController,
+          validator: (value){
+            if(value.length != 8){
+              return "Senha precisa de 8 caracteres";
+            }{
+              return null;
+            }
+          },
           decoration: InputDecoration(
               labelText: label,
               labelStyle: TextStyle(fontSize: 18),
@@ -136,7 +163,7 @@ class _LoginState extends State<Login> {
   Widget entrar(String label){
     return (
         Container(
-          color: Theme.of(context).primaryColorDark,
+          color: Theme.of(context).primaryColor,
           height: 40,
           width: double.infinity,
           child: FlatButton(
@@ -158,4 +185,11 @@ class _LoginState extends State<Login> {
       )
     );
   }
+
+  void verificarConexao() async{
+    ConnectivityResult connectivityResult = await (Connectivity().checkConnectivity());
+    print(connectivityResult);
+    _conexaoStream.add(connectivityResult);
+  }
+
 }

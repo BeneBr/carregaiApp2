@@ -15,8 +15,8 @@ class TabbedBar extends StatelessWidget {
             labelStyle: TextStyle(fontSize: 18),
             indicatorColor: Theme.of(context).primaryColor,
             tabs: <Widget>[
-              Tab(text: "ENTRAR", icon: Icon(Icons.person),),
-              Tab(text: "CADASTRAR", icon: Icon(Icons.person_add),),
+              Tab(text: "ENTRAR", icon: Icon(Icons.person, size: 25,),),
+              Tab(text: "CADASTRAR", icon: Icon(Icons.person_add, size: 25,),),
             ],
           ),
         ),
