@@ -1,28 +1,31 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:cpf_cnpj_validator/cpf_validator.dart';
 import 'package:cpf_cnpj_validator/cnpj_validator.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
-import 'package:connectivity/connectivity.dart';
+import 'package:scoped_model/scoped_model.dart';
+import 'package:carregaai/Models/UserModel/UserModel.dart';
+
 
 class Login extends StatefulWidget {
+
   @override
   _LoginState createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> {
 
+  GlobalKey _entrar = GlobalKey();
 
   bool exibirSenha = true;
   String dica = "Visualizar";
+  bool _conectado;
+
 
   TextEditingController _cpfController = MaskedTextController(mask: "000.000.000-00");
   TextEditingController _cnpjController = MaskedTextController(mask: "00.000.000/0000-00");
   TextEditingController _senhaController = TextEditingController();
   GlobalKey<FormState> _form = GlobalKey<FormState>();
   TextEditingController _cpfCnpjController;
-  final _conexaoStream = StreamController<ConnectivityResult>();
 
 
   @override
@@ -35,33 +38,38 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    return
-      Center(
-          child: SingleChildScrollView(
-            padding: EdgeInsets.only(top: 10, left: 20, right: 20),
-            child: Form(
-              key: _form,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Container(margin: EdgeInsets.only(bottom: 50), child: Text("ENTRAR", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),)),
-                  cpfCnpj("CPF ou CNPJ"),
-                  Divider(),
-                  password("SENHA"),
-                  Divider(),
-                  entrar("ENTRAR"),
-                  Divider(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      esqueciaSenha("Baa, esqueci a senha.")
-                    ],
-                  ),
-                ],
+    return ScopedModelDescendant<UserModel>(
+      builder: (context, child, model){
+        _conectado = ScopedModel.of<UserModel>(context).conectado;
+
+        return  Center(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.only(top: 10, left: 20, right: 20),
+              child: Form(
+                key: _form,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(margin: EdgeInsets.only(bottom: 50), child: Text("ENTRAR", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),)),
+                    cpfCnpj("CPF ou CNPJ"),
+                    Divider(),
+                    password("SENHA"),
+                    Divider(),
+                    entrar("ENTRAR", model),
+                    Divider(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        esqueciaSenha("Baa, esqueci a senha.")
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-          )
+            )
         );
+      }
+    );
   }
 
   Widget cpfCnpj(String label){
@@ -160,7 +168,7 @@ class _LoginState extends State<Login> {
     }
   }
 
-  Widget entrar(String label){
+  Widget entrar(String label, UserModel model){
     return (
         Container(
           color: Theme.of(context).primaryColor,
@@ -169,7 +177,8 @@ class _LoginState extends State<Login> {
           child: FlatButton(
             splashColor: Theme.of(context).primaryColorLight,
             child: Text(label, style: TextStyle(fontSize: 18, color: Colors.white),),
-            onPressed: ()=>null,
+            disabledColor: Colors.grey,
+            onPressed: _conectado ? oi : null
           ),
         )
     );
@@ -186,10 +195,7 @@ class _LoginState extends State<Login> {
     );
   }
 
-  void verificarConexao() async{
-    ConnectivityResult connectivityResult = await (Connectivity().checkConnectivity());
-    print(connectivityResult);
-    _conexaoStream.add(connectivityResult);
+  void oi(){
+    print("oi");
   }
-
 }

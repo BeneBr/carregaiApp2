@@ -3,6 +3,8 @@ import 'package:cpf_cnpj_validator/cpf_validator.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
+import 'package:scoped_model/scoped_model.dart';
+import 'package:carregaai/Models/UserModel/UserModel.dart';
 
 class Cadastro extends StatefulWidget {
   @override
@@ -11,13 +13,14 @@ class Cadastro extends StatefulWidget {
 
 class _CadastroState extends State<Cadastro> {
 
+  bool _conectado;
   bool exibirSenha = true;
   String dica = "Visualizar";
 
   TextEditingController _cpfController = MaskedTextController(mask: "000.000.000-00");
   TextEditingController _cnpjController = MaskedTextController(mask: "00.000.000/0000-00");
   TextEditingController _senhaController = TextEditingController();
-  TextEditingController _cpfCnpjController;
+  TextEditingController _cpfCnpjController = TextEditingController();
 
   TextEditingController _nomeController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
@@ -27,42 +30,49 @@ class _CadastroState extends State<Cadastro> {
 
   @override
   void dispose() {
-    _cpfCnpjController.dispose();
+    super.dispose();
     _cnpjController.dispose();
     _senhaController.dispose();
     _cpfCnpjController.dispose();
     _nomeController.dispose();
     _emailController.dispose();
     _telefoneController.dispose();
-    print("OI");
-    super.dispose();
+
   }
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: EdgeInsets.only(top: 20, left: 20, right: 20),
-      child: Form(
-        key: _form,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-          Text("INFORME SEUS DADOS", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
-          Divider(),
-          campos("Nome ou Razao Social", _nomeController, TextInputType.text, false, nomeValidator),
-          Divider(),
-          cpfCnpj("CPF OU CNPJ"),
-          Divider(),
-          campos("Telefone", _telefoneController, TextInputType.number, false, telefoneValidator),
-          Divider(),
-          campos("Email",_emailController,TextInputType.emailAddress, false, emailValidator),
-          Divider(),
-          password("Senha"),
-          Divider(),
-          cadastrar("EFETUAR CADASTRO"),
-          ],
-        ),
-      ),
+
+
+    return ScopedModelDescendant<UserModel>(
+      builder: (context, child, model){
+        _conectado = ScopedModel.of<UserModel>(context).conectado;
+
+        return SingleChildScrollView(
+          padding: EdgeInsets.only(top: 20, left: 20, right: 20),
+          child: Form(
+            key: _form,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Text("INFORME SEUS DADOS", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
+                Divider(),
+                campos("Nome ou Razao Social", _nomeController, TextInputType.text, false, nomeValidator),
+                Divider(),
+                cpfCnpj("CPF OU CNPJ"),
+                Divider(),
+                campos("Telefone", _telefoneController, TextInputType.number, false, telefoneValidator),
+                Divider(),
+                campos("Email",_emailController,TextInputType.emailAddress, false, emailValidator),
+                Divider(),
+                password("Senha"),
+                Divider(),
+                cadastrar("EFETUAR CADASTRO"),
+              ],
+            ),
+          ),
+        );
+      }
     );
   }
 
@@ -178,13 +188,10 @@ class _CadastroState extends State<Cadastro> {
           height: 40,
           width: double.infinity,
           child: FlatButton(
+            disabledColor: Colors.grey,
             splashColor: Theme.of(context).primaryColorLight,
             child: Text(label, style: TextStyle(fontSize: 18, color: Colors.white),),
-            onPressed: (){
-              if(_form.currentState.validate()){
-                print("Oi");
-              }
-            },
+            onPressed: _conectado ? (){oi("OLA MUNDO");} : null,
           ),
         )
     );
@@ -212,5 +219,9 @@ class _CadastroState extends State<Cadastro> {
     }else{
       return null;
     }
+  }
+
+  void oi(String Ola){
+    print(Ola);
   }
 }
