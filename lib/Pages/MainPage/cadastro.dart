@@ -46,7 +46,7 @@ class _CadastroState extends State<Cadastro> {
 
     return ScopedModelDescendant<UserModel>(
       builder: (context, child, model){
-        _conectado = ScopedModel.of<UserModel>(context).conectado;
+        _conectado = ScopedModel.of<UserModel>(context).getConectado();
 
         return SingleChildScrollView(
           padding: EdgeInsets.only(top: 20, left: 20, right: 20),
@@ -191,7 +191,11 @@ class _CadastroState extends State<Cadastro> {
             disabledColor: Colors.grey,
             splashColor: Theme.of(context).primaryColorLight,
             child: Text(label, style: TextStyle(fontSize: 18, color: Colors.white),),
-            onPressed: _conectado ? (){oi("OLA MUNDO");} : null,
+            onPressed: _conectado ? (){
+              if(_form.currentState.validate()){
+                print("ola mundo");
+              }
+            } : null,
           ),
         )
     );

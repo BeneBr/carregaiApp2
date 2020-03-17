@@ -26,11 +26,11 @@ class _TabbedBarState extends State<TabbedBar> {
             )
         );
         setState(() {
-          ScopedModel.of<UserModel>(context).conectado = false;
+          ScopedModel.of<UserModel>(context).setConectado(false);
         });
       }else{
         setState(() {
-          ScopedModel.of<UserModel>(context).conectado = true;
+          ScopedModel.of<UserModel>(context).setConectado(true);
         });
       }
     });

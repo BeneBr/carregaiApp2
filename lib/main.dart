@@ -1,3 +1,4 @@
+import 'package:carregaai/Pages/MainPage/login.dart';
 import 'package:carregaai/Pages/MainPage/tabbed_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';

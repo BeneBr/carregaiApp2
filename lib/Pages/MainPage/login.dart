@@ -38,9 +38,9 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return ScopedModelDescendant<UserModel>(
       builder: (context, child, model){
-        _conectado = ScopedModel.of<UserModel>(context, rebuildOnChange: true).conectado;
+        _conectado = ScopedModel.of<UserModel>(context, rebuildOnChange: true).getConectado();
 
-        if(model.carregando){
+        if(model.getCarregando()){
           return Center(
             child: Container(
               child: Column(
@@ -50,7 +50,7 @@ class _LoginState extends State<Login> {
                     valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColorLight),
                   ),
                   Divider(color: Colors.white,),
-                  Text("ENTRANDO NO APLICATIVO", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+                  Text("VERIFICANDO SEUS DADOS", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
                 ],
               ),
             ),
@@ -194,17 +194,15 @@ class _LoginState extends State<Login> {
             child: Text(label, style: TextStyle(fontSize: 18, color: Colors.white),),
             disabledColor: Colors.grey,
             onPressed: _conectado ? () async {
+              if(_form.currentState.validate()){
+                model.setCarregando(true);
 
-              model.carregando = true;
-              model.notifyListeners();
+                await Future.delayed(Duration(seconds: 3));
 
-              await Future.delayed(Duration(seconds: 3));
+                await Navigator.push(context, MaterialPageRoute(builder: (context)=>MainPage()));
 
-              await Navigator.push(context, MaterialPageRoute(builder: (context)=>MainPage()));
-
-              model.carregando = false;
-              model.notifyListeners();
-
+                model.setCarregando(false);
+              }
             } : null
           ),
         )
