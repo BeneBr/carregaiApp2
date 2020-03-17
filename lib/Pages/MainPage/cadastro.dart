@@ -221,7 +221,7 @@ class _CadastroState extends State<Cadastro> {
     }
   }
 
-  void oi(String Ola){
-    print(Ola);
+  void oi(String ola){
+    print(ola);
   }
 }

@@ -1,10 +1,10 @@
+import 'package:carregaai/Pages/HomePage/MainPage.dart';
 import 'package:flutter/material.dart';
 import 'package:cpf_cnpj_validator/cpf_validator.dart';
 import 'package:cpf_cnpj_validator/cnpj_validator.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:carregaai/Models/UserModel/UserModel.dart';
-
 
 class Login extends StatefulWidget {
 
@@ -13,8 +13,6 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-
-  GlobalKey _entrar = GlobalKey();
 
   bool exibirSenha = true;
   String dica = "Visualizar";
@@ -40,7 +38,24 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return ScopedModelDescendant<UserModel>(
       builder: (context, child, model){
-        _conectado = ScopedModel.of<UserModel>(context).conectado;
+        _conectado = ScopedModel.of<UserModel>(context, rebuildOnChange: true).conectado;
+
+        if(model.carregando){
+          return Center(
+            child: Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColorLight),
+                  ),
+                  Divider(color: Colors.white,),
+                  Text("ENTRANDO NO APLICATIVO", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+                ],
+              ),
+            ),
+          );
+        }
 
         return  Center(
             child: SingleChildScrollView(
@@ -178,7 +193,19 @@ class _LoginState extends State<Login> {
             splashColor: Theme.of(context).primaryColorLight,
             child: Text(label, style: TextStyle(fontSize: 18, color: Colors.white),),
             disabledColor: Colors.grey,
-            onPressed: _conectado ? oi : null
+            onPressed: _conectado ? () async {
+
+              model.carregando = true;
+              model.notifyListeners();
+
+              await Future.delayed(Duration(seconds: 3));
+
+              await Navigator.push(context, MaterialPageRoute(builder: (context)=>MainPage()));
+
+              model.carregando = false;
+              model.notifyListeners();
+
+            } : null
           ),
         )
     );
@@ -193,9 +220,5 @@ class _LoginState extends State<Login> {
         ),
       )
     );
-  }
-
-  void oi(){
-    print("oi");
   }
 }

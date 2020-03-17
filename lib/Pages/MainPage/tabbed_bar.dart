@@ -14,11 +14,9 @@ class TabbedBar extends StatefulWidget {
 class _TabbedBarState extends State<TabbedBar> {
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  UserModel _userModel = UserModel();
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Connectivity().onConnectivityChanged.listen((result) {
       if(result == ConnectivityResult.none){
@@ -28,11 +26,11 @@ class _TabbedBarState extends State<TabbedBar> {
             )
         );
         setState(() {
-          _userModel.conectado = false;
+          ScopedModel.of<UserModel>(context).conectado = false;
         });
       }else{
         setState(() {
-          _userModel.conectado = true;
+          ScopedModel.of<UserModel>(context).conectado = true;
         });
       }
     });
@@ -40,30 +38,32 @@ class _TabbedBarState extends State<TabbedBar> {
 
   @override
   Widget build(BuildContext context) {
-    return ScopedModel<UserModel>(
-      model: _userModel,
-      child: DefaultTabController(
-        length: 2,
-        child: Scaffold(
-          key: _scaffoldKey,
-          appBar: AppBar(
-            bottom: TabBar(
-              labelStyle: TextStyle(fontSize: 18),
-              indicatorColor: Theme.of(context).primaryColor,
-              tabs: <Widget>[
-                Tab(text: "ENTRAR", icon: Icon(Icons.person, size: 25,),),
-                Tab(text: "CADASTRAR", icon: Icon(Icons.person_add, size: 25,),),
+
+    return ScopedModelDescendant<UserModel>(
+      builder: (context, child, model){
+        return DefaultTabController(
+          length: 2,
+          child: Scaffold(
+            key: _scaffoldKey,
+            appBar: AppBar(
+              bottom: TabBar(
+                labelStyle: TextStyle(fontSize: 18),
+                indicatorColor: Theme.of(context).primaryColor,
+                tabs: <Widget>[
+                  Tab(text: "ENTRAR", icon: Icon(Icons.person, size: 25,),),
+                  Tab(text: "CADASTRAR", icon: Icon(Icons.person_add, size: 25,),),
+                ],
+              ),
+            ),
+            body: TabBarView(
+              children: <Widget>[
+                Login(),
+                Cadastro(),
               ],
             ),
           ),
-          body: TabBarView(
-            children: <Widget>[
-              Login(),
-              Cadastro(),
-            ],
-          ),
-        ),
-      ),
+        );
+      }
     );
   }
 }

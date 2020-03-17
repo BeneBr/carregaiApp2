@@ -1,7 +1,7 @@
 import 'package:scoped_model/scoped_model.dart';
 
 class UserModel extends Model{
-  bool carregando;
+  bool carregando = false;
   bool conectado = true;
   String nomeRazao;
   String cpfCnpj;
@@ -32,5 +32,9 @@ class UserModel extends Model{
   void setFoto(String foto){
     this.foto = foto;
     notifyListeners();
+  }
+
+  String getNomeRazao(){
+    return this.nomeRazao;
   }
 }
