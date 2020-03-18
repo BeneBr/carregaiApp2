@@ -4,19 +4,25 @@ import 'package:carregaai/Models/UserModel/UserModel.dart';
 import 'package:carregaai/Pages/MainPage/tabbed_bar.dart';
 
 
-class MainPage extends StatefulWidget {
+class HomePage extends StatefulWidget {
   @override
-  _MainPageState createState() => _MainPageState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _HomePageState extends State<HomePage> {
 
   bool conectado;
+  String nomeRazao;
+  String cpfCnpj;
+  double pontos;
 
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<UserModel>(
         builder: (context, child, model) {
+          nomeRazao = model.getNomeRazao();
+          cpfCnpj = model.getCpnCnpj();
+          pontos = model.getPontos();
 
           return (
             Scaffold(
@@ -52,20 +58,11 @@ class _MainPageState extends State<MainPage> {
                                 )
                               ]
                           ),
-                          Text("NOME DO FULANO", style: TextStyle(
+                          Text(nomeRazao, style: TextStyle(
                               color: Colors.white,
                               fontSize: 18,
                               fontWeight: FontWeight.bold),),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Icon(Icons.star, color: Colors.amber,),
-                              Icon(Icons.star, color: Colors.amber,),
-                              Icon(Icons.star, color: Colors.amber,),
-                              Icon(Icons.star, color: Colors.amber,),
-                              Icon(Icons.star_half, color: Colors.amber,),
-                            ],
-                          )
+                          Text(cpfCnpj, style: TextStyle(color: Colors.white, fontSize: 16),)
                         ],
                       ),
                       decoration: BoxDecoration(

@@ -254,7 +254,7 @@ class _CadastroState extends State<Cadastro> {
 
   void cadastroResult(int codigo, String Mensagem){
     showDialog(context: context,
-      barrierDismissible: true,
+      barrierDismissible: false,
       builder: (context) => AlertDialog(
         elevation: 20.0,
         title: codigo == 201 ? Text("Cadastro Efetuado",textAlign: TextAlign.center,) : Text(Mensagem, textAlign: TextAlign.center,),

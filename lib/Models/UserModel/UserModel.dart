@@ -3,6 +3,7 @@ import 'package:scoped_model/scoped_model.dart';
 class UserModel extends Model{
   bool _carregando = false;
   bool _conectado = true;
+  String _token;
   String _nomeRazao;
   String _cpfCnpj;
   String _telefone;
@@ -30,6 +31,10 @@ class UserModel extends Model{
     notifyListeners();
   }
 
+  String getCpnCnpj(){
+    return this._cpfCnpj;
+  }
+
   void setTelefone(String telefone){
     this._telefone = telefone;
     notifyListeners();
@@ -45,6 +50,15 @@ class UserModel extends Model{
     notifyListeners();
   }
 
+  void setPontos(double pontos){
+    this._pontos = pontos;
+    notifyListeners();
+  }
+
+  double getPontos(){
+    return this._pontos;
+  }
+
   String getNomeRazao(){
     return this._nomeRazao;
   }
@@ -55,5 +69,10 @@ class UserModel extends Model{
 
   bool getCarregando(){
     return this._carregando;
+  }
+
+  void setToken(String token){
+    this._token = token;
+    notifyListeners();
   }
 }

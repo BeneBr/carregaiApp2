@@ -1,4 +1,5 @@
-import 'package:carregaai/Pages/HomePage/MainPage.dart';
+import 'package:carregaai/Controllers/UserController.dart';
+import 'package:carregaai/Pages/HomePage/HomePage.dart';
 import 'package:flutter/material.dart';
 import 'package:cpf_cnpj_validator/cpf_validator.dart';
 import 'package:cpf_cnpj_validator/cnpj_validator.dart';
@@ -21,7 +22,7 @@ class _LoginState extends State<Login> {
 
   TextEditingController _cpfController = MaskedTextController(mask: "000.000.000-00");
   TextEditingController _cnpjController = MaskedTextController(mask: "00.000.000/0000-00");
-  TextEditingController _senhaController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
   GlobalKey<FormState> _form = GlobalKey<FormState>();
   TextEditingController _cpfCnpjController;
 
@@ -31,7 +32,7 @@ class _LoginState extends State<Login> {
     super.dispose();
     _cpfController.dispose();
     _cnpjController.dispose();
-    _senhaController.dispose();
+    _passwordController.dispose();
   }
 
   @override
@@ -141,7 +142,7 @@ class _LoginState extends State<Login> {
           style: TextStyle(fontSize: 18),
           keyboardType: TextInputType.text,
           obscureText: exibirSenha,
-          controller: _senhaController,
+          controller: _passwordController,
           validator: (value){
             if(value.length != 8){
               return "Senha precisa de 8 caracteres";
@@ -195,13 +196,11 @@ class _LoginState extends State<Login> {
             disabledColor: Colors.grey,
             onPressed: _conectado ? () async {
               if(_form.currentState.validate()){
-                model.setCarregando(true);
+                String cpfCnpj = _cpfCnpjController.text.length > 14 ? CNPJValidator.strip(_cnpjController.text) :
+                CPFValidator.strip(_cpfController.text);
 
-                await Future.delayed(Duration(seconds: 3));
+                login(cpfCnpj, _passwordController.text, model, loginResult);
 
-                await Navigator.push(context, MaterialPageRoute(builder: (context)=>MainPage()));
-
-                model.setCarregando(false);
               }
             } : null
           ),
@@ -218,5 +217,25 @@ class _LoginState extends State<Login> {
         ),
       )
     );
+  }
+
+  void loginResult(int codigo, String Mensagem){
+    if(codigo == 200){
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage(),));
+    }else{
+      showDialog(context: context,
+        builder: (context) => AlertDialog(
+          title: Text(Mensagem, style: TextStyle(fontSize: 20),),
+          content: Icon(Icons.error, color: Theme.of(context).primaryColorLight, size: 40,),
+          actions: <Widget>[
+            FlatButton(
+              color: Theme.of(context).primaryColorLight,
+              child: Text("OK",style: TextStyle(color: Colors.white,fontSize: 20),),
+              onPressed: (){Navigator.pop(context);},
+            ),
+          ],
+        )
+      );
+    }
   }
 }
