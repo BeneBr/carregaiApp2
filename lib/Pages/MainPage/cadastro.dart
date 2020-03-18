@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:carregaai/Models/UserModel/UserModel.dart';
+import 'package:carregaai/Controllers/UserController.dart';
 
 class Cadastro extends StatefulWidget {
   @override
@@ -48,6 +49,24 @@ class _CadastroState extends State<Cadastro> {
       builder: (context, child, model){
         _conectado = ScopedModel.of<UserModel>(context).getConectado();
 
+        if(model.getCarregando()){
+          return Center(
+            child: Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColorLight),
+                  ),
+                  Divider(color: Colors.white,),
+                  Text("EFETUANDO CADASTRO", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+                ],
+              ),
+            ),
+          );
+        }
+
+
         return SingleChildScrollView(
           padding: EdgeInsets.only(top: 20, left: 20, right: 20),
           child: Form(
@@ -67,7 +86,7 @@ class _CadastroState extends State<Cadastro> {
                 Divider(),
                 password("Senha"),
                 Divider(),
-                cadastrar("EFETUAR CADASTRO"),
+                cadastrar("EFETUAR CADASTRO", model),
               ],
             ),
           ),
@@ -181,7 +200,7 @@ class _CadastroState extends State<Cadastro> {
     );
   }
 
-  Widget cadastrar(String label){
+  Widget cadastrar(String label, UserModel model){
     return (
         Container(
           color: Theme.of(context).primaryColor,
@@ -191,9 +210,17 @@ class _CadastroState extends State<Cadastro> {
             disabledColor: Colors.grey,
             splashColor: Theme.of(context).primaryColorLight,
             child: Text(label, style: TextStyle(fontSize: 18, color: Colors.white),),
-            onPressed: _conectado ? (){
+            onPressed: _conectado ? () async {
               if(_form.currentState.validate()){
-                print("ola mundo");
+                Map<String,dynamic> user = {
+                  'nomeRazao': _nomeController.text,
+                  'cpfCnpj': _cpfCnpjController.text.length > 14 ? CNPJValidator.strip(_cnpjController.text) :
+                      CPFValidator.strip(_cpfController.text),
+                  'telefone': _telefoneController.text,
+                  'email': _emailController.text
+                };
+                print(_senhaController.text);
+                realizarCadastro(user, _senhaController.text , model, cadastroResult, context);
               }
             } : null,
           ),
@@ -225,7 +252,21 @@ class _CadastroState extends State<Cadastro> {
     }
   }
 
-  void oi(String ola){
-    print(ola);
+  void cadastroResult(int codigo, String Mensagem){
+    showDialog(context: context,
+      barrierDismissible: true,
+      builder: (context) => AlertDialog(
+        elevation: 20.0,
+        title: codigo == 201 ? Text("Cadastro Efetuado",textAlign: TextAlign.center,) : Text(Mensagem, textAlign: TextAlign.center,),
+        content: Icon(codigo == 201 ? Icons.check : Icons.error, color: Theme.of(context).primaryColorLight,size: 60,),
+        actions: <Widget>[
+          FlatButton(
+            color: Theme.of(context).primaryColorLight,
+            child: Text("OK",style: TextStyle(color: Colors.white,fontSize: 20),),
+            onPressed: (){Navigator.pop(context);},
+          ),
+        ],
+      )
+    );
   }
 }
