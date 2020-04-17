@@ -1,0 +1,4 @@
+#Fri Apr 17 12:25:45 BRT 2020
+base.0=/home/gustavoberned/Documents/carregaiApp2/build/app/intermediates/dex/debug/mergeDexDebug/out/classes.dex
+path.0=classes.dex
+renamed.0=classes.dex

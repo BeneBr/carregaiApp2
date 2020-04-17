@@ -55,6 +55,7 @@ flutter:
     - images/product.png
     - images/shipping.png
     - images/profit.png
+    - images/exit_app.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

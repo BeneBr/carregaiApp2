@@ -51,7 +51,7 @@ class _LoginState extends State<Login> {
                     valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColorLight),
                   ),
                   Divider(color: Colors.white,),
-                  Text("VERIFICANDO SEUS DADOS", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+                  Text("Verificando suas Informações", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
                 ],
               ),
             ),
@@ -66,12 +66,12 @@ class _LoginState extends State<Login> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Container(margin: EdgeInsets.only(bottom: 50), child: Text("ENTRAR", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),)),
+                    Container(margin: EdgeInsets.only(bottom: 50), child: Text("Entrar", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),)),
                     cpfCnpj("CPF ou CNPJ"),
                     Divider(),
-                    password("SENHA"),
+                    password("Senha"),
                     Divider(),
-                    entrar("ENTRAR", model),
+                    entrar("Entrar", model),
                     Divider(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -180,7 +180,7 @@ class _LoginState extends State<Login> {
     if(CPFValidator.isValid(value) || CNPJValidator.isValid(value)){
       return null;
     }else{
-      return "CPF OU CNPJ INVALIDO";
+      return "CPF ou CNPJ Inválido";
     }
   }
 
@@ -219,13 +219,13 @@ class _LoginState extends State<Login> {
     );
   }
 
-  void loginResult(int codigo, String Mensagem){
+  void loginResult(int codigo, String mensagem){
     if(codigo == 200){
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage(),));
     }else{
       showDialog(context: context,
         builder: (context) => AlertDialog(
-          title: Text(Mensagem, style: TextStyle(fontSize: 20),),
+          title: Text(mensagem, style: TextStyle(fontSize: 20),),
           content: Icon(Icons.error, color: Theme.of(context).primaryColorLight, size: 40,),
           actions: <Widget>[
             FlatButton(

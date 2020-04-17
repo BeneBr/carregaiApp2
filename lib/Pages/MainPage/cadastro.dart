@@ -74,7 +74,7 @@ class _CadastroState extends State<Cadastro> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Text("INFORME SEUS DADOS", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
+                Text("Informe seus Dados", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
                 Divider(),
                 campos("Nome ou Razao Social", _nomeController, TextInputType.text, false, nomeValidator),
                 Divider(),
@@ -86,7 +86,7 @@ class _CadastroState extends State<Cadastro> {
                 Divider(),
                 password("Senha"),
                 Divider(),
-                cadastrar("EFETUAR CADASTRO", model),
+                cadastrar("Efetuar Cadastro", model),
               ],
             ),
           ),
@@ -219,7 +219,6 @@ class _CadastroState extends State<Cadastro> {
                   'telefone': _telefoneController.text,
                   'email': _emailController.text
                 };
-                print(_senhaController.text);
                 realizarCadastro(user, _senhaController.text , model, cadastroResult, context);
               }
             } : null,
@@ -252,12 +251,12 @@ class _CadastroState extends State<Cadastro> {
     }
   }
 
-  void cadastroResult(int codigo, String Mensagem){
+  void cadastroResult(int codigo, String mensagem){
     showDialog(context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
         elevation: 20.0,
-        title: codigo == 201 ? Text("Cadastro Efetuado",textAlign: TextAlign.center,) : Text(Mensagem, textAlign: TextAlign.center,),
+        title: codigo == 201 ? Text("Cadastro Efetuado",textAlign: TextAlign.center,) : Text(mensagem, textAlign: TextAlign.center,),
         content: Icon(codigo == 201 ? Icons.check : Icons.error, color: Theme.of(context).primaryColorLight,size: 60,),
         actions: <Widget>[
           FlatButton(
