@@ -57,7 +57,9 @@ void login(String cpfCnpj, String password, UserModel model, Function loginResul
       model.setToken(responseDecoded['token']);
       model.setNomeRazao(responseDecoded['user']['nomeRazao']);
       model.setcpfCnpj(responseDecoded['user']['cpfCnpj']);
-      model.setPontos(double.parse(responseDecoded['user']['pontos']));
+      model.setFoto(responseDecoded['user']['foto']);
+      model.setPontos(double.parse(responseDecoded['user']['pontos'] + 0.0));
+      print(model.getFoto());
       loginResult(response.statusCode, responseDecoded['mensagem']);
       model.setCarregando(false);
     }else{
@@ -69,4 +71,26 @@ void login(String cpfCnpj, String password, UserModel model, Function loginResul
     model.setCarregando(false);
   }
 }
+
+void enviarFoto(String cpf, String foto, String token) async {
+    var body = {
+      'cpfCnpj': cpf,
+      'foto': foto,
+    };
+    http.Response response;
+    try{
+      response = await http.post(
+        url+'/user/image',
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+        body: jsonEncode(body)
+      );
+      print(response.statusCode);
+    }catch(err){
+      print(err);
+    }
+  }
 

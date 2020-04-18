@@ -1,9 +1,11 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:carregaai/Models/UserModel/UserModel.dart';
-
 import '../MainPage/tabbed_bar.dart';
-
+import 'package:image_picker/image_picker.dart';
+import 'package:carregaai/Controllers/UserController.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -13,17 +15,23 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 
   bool conectado;
+  String foto;
+  String imagemEncoded;
   String nomeRazao;
   String cpfCnpj;
+  String token;
   double pontos;
 
   @override
   Widget build(BuildContext context) {
+
     return ScopedModelDescendant<UserModel>(
         builder: (context, child, model) {
+          foto = model.getFoto();
           nomeRazao = model.getNomeRazao();
           cpfCnpj = model.getCpnCnpj();
           pontos = model.getPontos();
+          token = model.getToken();
 
           return (
             Scaffold(
@@ -42,8 +50,7 @@ class _HomePageState extends State<HomePage> {
                           Stack(
                               children: <Widget>[
                                 CircleAvatar(
-                                  backgroundImage: AssetImage(
-                                      'images/user.png'),
+                                  backgroundImage: foto == null ? AssetImage( 'images/user.png') : MemoryImage( base64Decode(foto)),
                                   radius: 40,
                                   backgroundColor: Colors.white,
                                 ),
@@ -54,7 +61,9 @@ class _HomePageState extends State<HomePage> {
                                     icon: Icon(Icons.edit, size: 30,),
                                     color: Colors.white,
                                     splashColor: Colors.grey,
-                                    onPressed: () => null,
+                                    onPressed: (){
+                                      tirarFoto();
+                                    },
                                   ),
                                 )
                               ]
@@ -116,4 +125,14 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  void tirarFoto() async {
+    var imagem = await ImagePicker.pickImage(source: ImageSource.camera, imageQuality: 5);
+    if(imagem != null){
+       ScopedModel.of<UserModel>(context).setFoto(base64Encode(imagem.readAsBytesSync()));
+      setState(() {
+        foto = ScopedModel.of<UserModel>(context).getFoto();
+      });
+      enviarFoto(cpfCnpj, foto, token);
+    }
+  }
 }

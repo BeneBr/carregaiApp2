@@ -49,6 +49,9 @@ class UserModel extends Model{
     this._foto = foto;
     notifyListeners();
   }
+  String getFoto(){
+    return this._foto;
+  }
 
   void setPontos(double pontos){
     this._pontos = pontos;
@@ -74,5 +77,9 @@ class UserModel extends Model{
   void setToken(String token){
     this._token = token;
     notifyListeners();
+  }
+
+  String getToken(){
+    return this._token;
   }
 }
