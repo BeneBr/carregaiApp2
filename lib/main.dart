@@ -25,6 +25,9 @@ Future<void> main() async {
           iconTheme: IconThemeData(
             color: Color.fromRGBO(0, 37, 26, 1),
           ),
+          floatingActionButtonTheme: FloatingActionButtonThemeData(
+            backgroundColor: Color.fromRGBO(57, 121, 107, 1),
+          ),
         ),
         home: TabbedBar(),
       )

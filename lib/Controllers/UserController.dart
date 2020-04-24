@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:carregaai/Models/UserModel/UserModel.dart';
 import 'dart:convert';
 
-String url = "http://192.168.0.103:8080";
+String url = "http://192.168.0.106:8080";
 
 void realizarCadastro(Map<String, dynamic> user, String password, UserModel model, Function cadastroResult, BuildContext context) async {
   model.setCarregando(true);
@@ -53,6 +53,7 @@ void login(String cpfCnpj, String password, UserModel model, Function loginResul
       body: jsonEncode(body),
     );
     var responseDecoded = jsonDecode(response.body);
+    print(response.body);
     if(response.statusCode == 200){
       model.setToken(responseDecoded['token']);
       model.setNomeRazao(responseDecoded['user']['nomeRazao']);

@@ -1,11 +1,11 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:carregaai/Models/UserModel/UserModel.dart';
 import '../MainPage/tabbed_bar.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:carregaai/Controllers/UserController.dart';
+import 'package:carregaai/Pages/Demands/addresses.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -13,6 +13,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
 
   bool conectado;
   String foto;
@@ -39,6 +40,12 @@ class _HomePageState extends State<HomePage> {
                 centerTitle: true,
                 title: Text("CarregAI", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
               ),
+              floatingActionButton: FloatingActionButton(
+                child: Icon(Icons.add),
+                onPressed: (){
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Demands()));
+                },
+                ),
               drawer: Drawer(
                 elevation: 10.0,
                 child: ListView(
@@ -83,7 +90,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     ListTile(
                       title: Text(
-                        "Minhas Demandas", style: TextStyle(fontSize: 18),),
+                        "Minhas Solicitações", style: TextStyle(fontSize: 18),),
                       onTap: () => null,
                       leading: Image(
                         image: AssetImage('images/product.png'),
@@ -118,7 +125,9 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
-              body: Text("OLA"),
+              body: Center(
+                
+              )
             )
           );
         }
