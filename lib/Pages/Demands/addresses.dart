@@ -1,4 +1,6 @@
+import 'package:carregaai/Models/UserModel/UserModel.dart';
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class Demands extends StatefulWidget {
   @override
@@ -6,8 +8,12 @@ class Demands extends StatefulWidget {
 }
 
 class _DemandsState extends State<Demands> {
+
   @override
   Widget build(BuildContext context) {
+
+    
+
     TextEditingController _enderecOrigem = TextEditingController();
     TextEditingController _nrOrigem = TextEditingController();
     TextEditingController _complementoOrigem = TextEditingController();
@@ -68,6 +74,7 @@ class _DemandsState extends State<Demands> {
                       hintText: "Rua Liberdade, Itaqui ou CEP"
                     ),
                     onTap: (){
+                      print(name);
                       searcAddress(endereco, context);
                     },
                   ),
@@ -131,7 +138,7 @@ class _DemandsState extends State<Demands> {
               color: Theme.of(context).primaryColor,
               child: Text("Ok"),
               onPressed: (){
-              
+                FocusScope.of(context).unfocus();
                 Navigator.of(context).pop();
               },
             ),
