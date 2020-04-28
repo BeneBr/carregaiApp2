@@ -1,9 +1,9 @@
 import 'dart:ffi';
-
 import 'package:scoped_model/scoped_model.dart';
 
-class Demands extends ScopedModel {
+class DemandsModel extends Model {
   bool isLoading = false;
+
   bool forBusiness;
   bool accepted = false;
   bool alreadyPay = false;

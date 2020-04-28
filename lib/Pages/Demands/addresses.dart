@@ -1,4 +1,6 @@
-import 'package:carregaai/Models/UserModel/UserModel.dart';
+import 'dart:async';
+import 'package:carregaai/Controllers/AddressController.dart';
+import 'package:carregaai/Models/DemandasModel/DemandasModel.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -8,11 +10,15 @@ class Demands extends StatefulWidget {
 }
 
 class _DemandsState extends State<Demands> {
+  StreamController _suggestionsController;
+  Stream _suggestionsStream;
+  Timer debounce;
 
-  @override
-  Widget build(BuildContext context) {
-
-    
+   @override
+    initState(){
+      _suggestionsController = StreamController();
+      _suggestionsStream = _suggestionsController.stream;
+    }
 
     TextEditingController _enderecOrigem = TextEditingController();
     TextEditingController _nrOrigem = TextEditingController();
@@ -21,9 +27,16 @@ class _DemandsState extends State<Demands> {
     TextEditingController _nrDestino = TextEditingController();
     TextEditingController _complementoDestino = TextEditingController();
 
-    return Scaffold(
+
+  @override
+  Widget build(BuildContext context) {
+
+    return ScopedModel<DemandsModel>(
+      model: DemandsModel(),
+      child: Scaffold(
       appBar: AppBar(
         title: Text("Solicitar Entrega"),
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.only(left:10, right: 10),
@@ -51,6 +64,7 @@ class _DemandsState extends State<Demands> {
          ], 
         ),
       )
+    ),
     );
   }
 
@@ -74,7 +88,6 @@ class _DemandsState extends State<Demands> {
                       hintText: "Rua Liberdade, Itaqui ou CEP"
                     ),
                     onTap: (){
-                      print(name);
                       searcAddress(endereco, context);
                     },
                   ),
@@ -125,13 +138,40 @@ class _DemandsState extends State<Demands> {
       builder: (context){
         return AlertDialog(
           title: TextField(
+            onChanged: (value){
+              if(debounce ?.isActive ?? false) debounce.cancel();
+              debounce = Timer(Duration(seconds: 1), (){
+                searchSuggestions(value, _suggestionsController);
+              });
+            },
             decoration: InputDecoration(
               labelText: "Rua Liberdade, Itaqui ou CEP"
             ),
             controller: controller,
           ),
-          content: SingleChildScrollView(
+          content: StreamBuilder(
+            stream: _suggestionsStream,
+            builder: (context, snapshot){
+              if(snapshot.data == null){
+                return Text("Nenhum Resultado Encontrado");
+              }
+
+              if(snapshot.data == "Aguardando"){
+                return Container(
+                  child: Center(child: CircularProgressIndicator(),),
+                );
+              }
+              return ListView.builder(
+                itemCount: snapshot.data["predictions"].length,
+                itemBuilder: (context, index){
+                  return (
+                    Text("${snapshot.data["predictions"][index]["description"]}")
+                  );
+                }
               
+              );
+            }
+          
           ),
           actions: <Widget>[
             FlatButton(
