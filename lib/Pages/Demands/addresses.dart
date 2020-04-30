@@ -16,7 +16,7 @@ class _DemandsState extends State<Demands> {
 
    @override
     initState(){
-      _suggestionsController = StreamController();
+      _suggestionsController = StreamController.broadcast();
       _suggestionsStream = _suggestionsController.stream;
     }
 
@@ -165,7 +165,17 @@ class _DemandsState extends State<Demands> {
                 itemCount: snapshot.data["predictions"].length,
                 itemBuilder: (context, index){
                   return (
-                    Text("${snapshot.data["predictions"][index]["description"]}")
+                    ListTile(
+                      onTap: (){
+                        controller.text = snapshot.data["predictions"][index]["description"].toString();
+                        Navigator.of(context).pop();
+                      },
+                      dense: true,
+                      leading: Icon(Icons.place),
+                      title: Text("${snapshot.data["predictions"][index]["terms"][2]["value"]}"),
+                      subtitle: Text("${snapshot.data["predictions"][index]["description"]}"),
+                    )
+                    //Text("${snapshot.data["predictions"][index]["terms"]}")
                   );
                 }
               

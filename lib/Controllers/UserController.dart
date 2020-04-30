@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:carregaai/Models/UserModel/UserModel.dart';
 import 'dart:convert';
 
-String url = "http://192.168.1.103:8080";
+String url = "http://192.168.1.104:8080";
 
 void realizarCadastro(Map<String, dynamic> user, String password, UserModel model, Function cadastroResult, BuildContext context) async {
   model.setCarregando(true);
