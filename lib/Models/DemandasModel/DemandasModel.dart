@@ -4,42 +4,46 @@ import 'package:scoped_model/scoped_model.dart';
 class DemandsModel extends Model {
   bool isLoading = false;
 
-  bool forBusiness;
-  bool accepted = false;
-  bool alreadyPay = false;
+  bool empresa;
+  bool aceito = false;
+  bool pago = false;
 
-  String requesterName;
-  String cpfCnpjRequester;
-  String deliveryManName;
-  String cpfCnpjDeliveryMan;
+  Map<String,dynamic> _enderecoOrigem = {"Endereco": "", "Numero": "", "Complemento": ""};
+  Map<String, dynamic> _enderecoDestino = {"Endereco": "", "Numero": "", "Complemento": ""};
 
-  List<String> photos;
-  Map<String, dynamic> _origem;
-  Map<String, dynamic> _destino;
-  String time;
-  int distance;
-  Float price;
+  String nomeRequisitante;
+  String cpfCnpjRequisitante;
+  String nomeEntregador;
+  String cpfCnpjEntregador;
 
-  void setOrigem(String endereco, int numero, String complemento){
-    this._origem = {
-      'Endereco' : endereco,
-      'Numero' : numero,
-      'Complemento' : complemento
-    };
-  }
-  void setDestino(String endereco, int numero, String complemento){
-    this._destino = {
-      'Endereco' : endereco,
-      'Numero' : numero,
-      'Complemento' : complemento
-    };
+  List<String> fotos;
+  String tempo;
+  int distancia;
+  Float preco;
+
+  void setEnderecoOrigem(String endereco, int numero, String complemento){
+    this._enderecoOrigem["Endereco"] = endereco;
+    this._enderecoOrigem["Numero"] = numero;
+    this._enderecoOrigem["Complemento"] = complemento;
   }
 
-  Map<String, dynamic> getOrigem(){
-    return this._origem;
+  void setEnderecoDestino(String endereco, int numero, String complemento){
+    this._enderecoDestino["Endereco"] = endereco;
+    this._enderecoDestino["Numero"] = numero;
+    this._enderecoDestino["Complemento"] = complemento;
   }
-  Map<String, dynamic> getDestino(){
-    return this._origem;
+
+  void getEnderecoOrigem(){
+    print(this._enderecoOrigem);
+  }
+  void getEnderecoDestino(){
+    print(this._enderecoDestino);
+  }
+
+
+  void setPreco(Float preco){
+    this.preco = preco;
+    notifyListeners();
   }
 
 }

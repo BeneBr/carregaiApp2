@@ -38,7 +38,7 @@
 27        android:name="io.flutter.app.FlutterApplication"
 27-->/home/gustavoberned/Documents/carregaiApp2/android/app/src/main/AndroidManifest.xml:9:9-57
 28        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-28-->[androidx.core:core:1.1.0] /home/gustavoberned/.gradle/caches/transforms-2/files-2.1/a528b13ac93e64cafa3d0480e2c93207/core-1.1.0/AndroidManifest.xml:24:18-86
+28-->[androidx.core:core:1.0.2] /home/gustavoberned/.gradle/caches/transforms-2/files-2.1/fecc98e05c7ccd4a0eedf7cff343a233/core-1.0.2/AndroidManifest.xml:22:18-86
 29        android:debuggable="true"
 30        android:icon="@mipmap/ic_launcher"
 30-->/home/gustavoberned/Documents/carregaiApp2/android/app/src/main/AndroidManifest.xml:11:9-43
